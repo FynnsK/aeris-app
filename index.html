@@ -3,19 +3,17 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Aeris – v1.0</title>
+  <title>Aeris – v1.4 Chimera</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1 id="title">Aeris</h1>
-    <p id="description">Wie geht es dir heute?</p>
-    <div id="options"></div>
-    <div id="scene"></div>
-    <div id="inputArea">
-      <input type="text" id="userInput" placeholder="Sag mir etwas..." />
-      <button onclick="respond()">Senden</button>
-    </div>
+    <h1>Aeris</h1>
+    <p>Was beschäftigt dich gerade?</p>
+    <input type="text" id="apiKey" placeholder="🔐 Dein Chutes API Key..." />
+    <input type="text" id="userInput" placeholder="💬 Deine Nachricht an Aeris..." />
+    <button onclick="askAeris()">Senden</button>
+    <div id="response"></div>
   </div>
   <script src="aeris.js"></script>
 </body>
