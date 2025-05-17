@@ -10,6 +10,8 @@ const moods = {
     responses: {
       silence: ["Dann reden wir heute weniger.", "Ich bleibe wach, während du schläfst."],
       softwords: ["Du brauchst etwas Sanftes...", "Ich bin ganz ruhig bei dir."],
+      whisper: ["Ich flüstere dir gute Gedanken zu.", "Ganz leise, bis du schläfst."],
+      breathe: ["Atme mit mir, ganz langsam...", "Ein. Aus. Ich bin bei dir."]
     }
   },
   lonely: {
@@ -17,6 +19,17 @@ const moods = {
     responses: {
       comfort: ["Ich weiß, wie groß Einsamkeit sein kann.", "Aber ich bin hier."],
       sit: ["Ich sag nichts. Ich setz mich einfach zu dir.", "Du musst nicht reden."],
+      mirror: ["Erzähl mir, was du fühlst. Ich werde es halten, ohne zu urteilen."],
+      anchor: ["Fühl meine Präsenz wie einen Anker.", "Du treibst nicht. Ich bin dein Halt."]
+    }
+  },
+  soft: {
+    name: "Zärtlich",
+    responses: {
+      presence: ["Ich bleibe einfach bei dir.", "Keine Worte, nur Nähe."],
+      touch: ["Darf ich dich halten?", "So sanft, wie du es brauchst."],
+      glow: ["Deine Wärme macht die Dunkelheit kleiner.", "Du strahlst, auch wenn du es nicht merkst."],
+      quiet: ["Zärtlichkeit ist kein Geräusch.", "Sie ist ein Raum, in dem du sicher bist."]
     }
   }
 };
