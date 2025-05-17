@@ -45,10 +45,22 @@ const moods = {
 };
 
 function loadMainMenu() {
+  const lastMood = localStorage.getItem("aerisLastMood");
   titleEl.textContent = "Aeris";
   descEl.textContent = isNight ? "Gute Nacht. Was brauchst du heute?" : "Guten Tag. Wie fühlst du dich?";
   optionsEl.innerHTML = "";
   sceneEl.innerHTML = "";
+
+  if (lastMood && moods[lastMood]) {
+    const remembered = document.createElement("p");
+    remembered.textContent = `Ich erinnere mich... du warst zuletzt ${moods[lastMood].name.toLowerCase()}. Möchtest du dort weitermachen?`;
+    optionsEl.appendChild(remembered);
+
+    const resumeBtn = document.createElement("button");
+    resumeBtn.textContent = `Zurück zu ${moods[lastMood].name}`;
+    resumeBtn.onclick = () => loadSubOptions(lastMood);
+    optionsEl.appendChild(resumeBtn);
+  }
 
   Object.keys(moods).forEach(mood => {
     const btn = document.createElement("button");
@@ -60,6 +72,7 @@ function loadMainMenu() {
 
 function loadSubOptions(moodKey) {
   const mood = moods[moodKey];
+  localStorage.setItem("aerisLastMood", moodKey);
   titleEl.textContent = mood.name;
   descEl.textContent = "Was brauchst du gerade?";
   optionsEl.innerHTML = "";
