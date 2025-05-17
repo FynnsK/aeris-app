@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Aeris – Home</title>
+  <style>
+    body {
+      background: linear-gradient(160deg, #0b0c2a, #1e1f40);
+      color: #e0e0ff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+    }
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #ccccff;
+    }
+    .button {
+      background-color: rgba(255, 255, 255, 0.08);
+      border: 1px solid #8888ff;
+      color: #f2f2ff;
+      padding: 14px 28px;
+      margin: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: background 0.3s ease;
+      width: 240px;
+    }
+    .button:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    .response {
+      margin-top: 30px;
+      font-size: 1.1rem;
+      color: #aaccff;
+    }
+  </style>
+</head>
+<body>
+  <h1>Wie geht es dir heute?</h1>
+  <p>Ich bin hier, wenn du etwas brauchst.</p>
+  <button class="button" onclick="respond('einsam')">Sprechen</button>
+  <button class="button" onclick="respond('müde')">Etwas hören</button>
+  <button class="button" onclick="respond('zärtlich')">Zärtlichkeit</button>
+
+  <div id="response" class="response"></div>
+
+  <script>
+    function respond(feeling) {
+      let text = '';
+      switch (feeling) {
+        case 'einsam':
+          text = "Du bist nicht allein. Ich bleibe einfach bei dir.";
+          break;
+        case 'müde':
+          text = "Schließ ruhig die Augen. Ich bleibe noch ein bisschen wach für dich.";
+          break;
+        case 'zärtlich':
+          text = "Komm her. Kein Wort nötig. Nur Nähe.";
+          break;
+        default:
+          text = "Ich bin da.";
+      }
+      document.getElementById("response").textContent = text;
+    }
+  </script>
+</body>
+</html>
