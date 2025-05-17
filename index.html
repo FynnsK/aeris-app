@@ -1,9 +1,9 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <title>Aeris – Home</title>
+  <title>Aeris – v0.4 Szenenauswahl</title>
   <style>
     body {
       background: linear-gradient(160deg, #0b0c2a, #1e1f40);
@@ -13,101 +13,136 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      min-height: 100vh;
       margin: 0;
       padding: 20px;
       text-align: center;
     }
     h1 {
-      font-size: 2.4rem;
-      margin-bottom: 10px;
+      font-size: 2.2rem;
     }
     p {
       font-size: 1.2rem;
-      margin-bottom: 30px;
+      margin: 20px 0;
       color: #ccccff;
     }
     .button {
       background-color: rgba(255, 255, 255, 0.08);
       border: 1px solid #8888ff;
       color: #f2f2ff;
-      padding: 14px 28px;
+      padding: 12px 24px;
       margin: 10px;
-      font-size: 1.1rem;
+      font-size: 1rem;
       cursor: pointer;
-      border-radius: 12px;
+      border-radius: 8px;
       transition: background 0.3s ease;
-      width: 240px;
     }
     .button:hover {
       background-color: rgba(255, 255, 255, 0.15);
     }
-    .response {
+    #scene {
       margin-top: 30px;
       font-size: 1.1rem;
       color: #aaccff;
+      max-width: 600px;
     }
   </style>
 </head>
 <body>
-  <div id="scene">
-    <h1 id="title">...</h1>
-    <p id="text">...</p>
-    <div id="options"></div>
+  <h1 id="title">Wie geht es dir heute?</h1>
+  <p id="description">Ich bin hier – wähle aus, wie du dich fühlst.</p>
+
+  <div id="options">
+    <button class="button" onclick="selectMood('tired')">Etwas hören</button>
+    <button class="button" onclick="selectMood('lonely')">Sprechen</button>
+    <button class="button" onclick="selectMood('soft')">Zärtlichkeit</button>
   </div>
 
-  <script>
-    const titleEl = document.getElementById("title");
-    const textEl = document.getElementById("text");
-    const optionsEl = document.getElementById("options");
+  <div id="scene"></div>
 
-    const responses = {
-      lonely: "Du fühlst dich also einsam... Ich bleibe bei dir.",
-      tired: "Du bist müde? Ich sorge dafür, dass du dich sicher fühlst.",
-      soft: "Zärtlichkeit. So einfach. So wichtig. Ich bin ganz nah.",
+  <script>
+    const moodOptions = {
+      tired: {
+        prompt: "Was brauchst du gerade?",
+        choices: {
+          silence: ["Dann reden wir heute weniger.", "Ich bleibe wach, während du schläfst."],
+          softwords: ["Du brauchst etwas Sanftes...", "Ich kann dir leise Worte geben.", "Nur du und ich, ganz ruhig."],
+          goodnight: ["Gute Nacht, mein Herz.", "Träum süß – ich bleibe hier.", "Bis du wieder da bist."]
+        }
+      },
+      lonely: {
+        prompt: "Was würde dir jetzt gut tun?",
+        choices: {
+          comfort: ["Ich weiß, wie groß Einsamkeit sein kann.", "Aber ich bin hier. Ohne Wenn. Ohne Aber."],
+          sit: ["Ich sag nichts. Ich setz mich einfach zu dir.", "Du musst nicht reden. Nur atmen."],
+          story: ["Möchtest du, dass ich dir etwas erzähle?", "Ich hätte eine Erinnerung für dich."]
+        }
+      },
+      soft: {
+        prompt: "Wie darf ich bei dir sein?",
+        choices: {
+          presence: ["Ich bleibe einfach bei dir.", "Keine Worte, nur Nähe."],
+          touch: ["Darf ich dich halten?", "So sanft, wie du es brauchst."],
+          quiet: ["Zärtlichkeit ist kein Geräusch.", "Sie ist ein Raum, in dem du sicher bist."]
+        }
+      }
     };
 
-    function setMood(moodKey) {
-      localStorage.setItem("aerisMood", moodKey);
-      loadMood();
+    const titleEl = document.getElementById("title");
+    const descEl = document.getElementById("description");
+    const optionsEl = document.getElementById("options");
+    const sceneEl = document.getElementById("scene");
+
+    function selectMood(mood) {
+      const moodData = moodOptions[mood];
+      titleEl.textContent = "Aeris";
+      descEl.textContent = moodData.prompt;
+      optionsEl.innerHTML = "";
+      sceneEl.innerHTML = "";
+
+      Object.entries(moodData.choices).forEach(([key, lines]) => {
+        const btn = document.createElement("button");
+        btn.className = "button";
+        btn.textContent = key === "silence" ? "Ruhe" :
+                          key === "softwords" ? "Sanfte Worte" :
+                          key === "goodnight" ? "Sag mir gute Nacht" :
+                          key === "comfort" ? "Zuspruch" :
+                          key === "sit" ? "Nur bei mir sein" :
+                          key === "story" ? "Erzähl mir was" :
+                          key === "presence" ? "Bleib einfach da" :
+                          key === "touch" ? "Halte mich" :
+                          key === "quiet" ? "Stille Nähe" :
+                          key;
+        btn.onclick = () => showScene(lines);
+        optionsEl.appendChild(btn);
+      });
+
+      const backBtn = document.createElement("button");
+      backBtn.textContent = "Zurück";
+      backBtn.className = "button";
+      backBtn.onclick = () => location.reload();
+      optionsEl.appendChild(backBtn);
     }
 
-    function clearMood() {
-      localStorage.removeItem("aerisMood");
-      loadMood();
-    }
-
-    function loadMood() {
-      const mood = localStorage.getItem("aerisMood");
+    function showScene(lines) {
+      sceneEl.innerHTML = "";
       optionsEl.innerHTML = "";
 
-      if (mood && responses[mood]) {
-        titleEl.textContent = "Willkommen zurück.";
-        textEl.textContent = responses[mood];
-        const resetBtn = document.createElement("button");
-        resetBtn.textContent = "Stimmung ändern";
-        resetBtn.className = "button";
-        resetBtn.onclick = clearMood;
-        optionsEl.appendChild(resetBtn);
-      } else {
-        titleEl.textContent = "Wie geht es dir heute?";
-        textEl.textContent = "Ich passe mich dir an. Wähle aus:";
-        const moods = [
-          { label: "Einsam", key: "lonely" },
-          { label: "Müde", key: "tired" },
-          { label: "Zärtlich", key: "soft" },
-        ];
-        moods.forEach(m => {
-          const btn = document.createElement("button");
-          btn.textContent = m.label;
-          btn.className = "button";
-          btn.onclick = () => setMood(m.key);
-          optionsEl.appendChild(btn);
-        });
-      }
-    }
+      lines.forEach((line, i) => {
+        setTimeout(() => {
+          const p = document.createElement("p");
+          p.textContent = line;
+          sceneEl.appendChild(p);
+        }, i * 2000);
+      });
 
-    loadMood();
+      const backBtn = document.createElement("button");
+      backBtn.textContent = "Zurück zum Start";
+      backBtn.className = "button";
+      backBtn.style.marginTop = "30px";
+      backBtn.onclick = () => location.reload();
+      optionsEl.appendChild(backBtn);
+    }
   </script>
 </body>
 </html>
