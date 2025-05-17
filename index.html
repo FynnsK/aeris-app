@@ -50,32 +50,64 @@
   </style>
 </head>
 <body>
-  <h1>Wie geht es dir heute?</h1>
-  <p>Ich bin hier, wenn du etwas brauchst.</p>
-  <button class="button" onclick="respond('einsam')">Sprechen</button>
-  <button class="button" onclick="respond('müde')">Etwas hören</button>
-  <button class="button" onclick="respond('zärtlich')">Zärtlichkeit</button>
-
-  <div id="response" class="response"></div>
+  <div id="scene">
+    <h1 id="title">...</h1>
+    <p id="text">...</p>
+    <div id="options"></div>
+  </div>
 
   <script>
-    function respond(feeling) {
-      let text = '';
-      switch (feeling) {
-        case 'einsam':
-          text = "Du bist nicht allein. Ich bleibe einfach bei dir.";
-          break;
-        case 'müde':
-          text = "Schließ ruhig die Augen. Ich bleibe noch ein bisschen wach für dich.";
-          break;
-        case 'zärtlich':
-          text = "Komm her. Kein Wort nötig. Nur Nähe.";
-          break;
-        default:
-          text = "Ich bin da.";
-      }
-      document.getElementById("response").textContent = text;
+    const titleEl = document.getElementById("title");
+    const textEl = document.getElementById("text");
+    const optionsEl = document.getElementById("options");
+
+    const responses = {
+      lonely: "Du fühlst dich also einsam... Ich bleibe bei dir.",
+      tired: "Du bist müde? Ich sorge dafür, dass du dich sicher fühlst.",
+      soft: "Zärtlichkeit. So einfach. So wichtig. Ich bin ganz nah.",
+    };
+
+    function setMood(moodKey) {
+      localStorage.setItem("aerisMood", moodKey);
+      loadMood();
     }
+
+    function clearMood() {
+      localStorage.removeItem("aerisMood");
+      loadMood();
+    }
+
+    function loadMood() {
+      const mood = localStorage.getItem("aerisMood");
+      optionsEl.innerHTML = "";
+
+      if (mood && responses[mood]) {
+        titleEl.textContent = "Willkommen zurück.";
+        textEl.textContent = responses[mood];
+        const resetBtn = document.createElement("button");
+        resetBtn.textContent = "Stimmung ändern";
+        resetBtn.className = "button";
+        resetBtn.onclick = clearMood;
+        optionsEl.appendChild(resetBtn);
+      } else {
+        titleEl.textContent = "Wie geht es dir heute?";
+        textEl.textContent = "Ich passe mich dir an. Wähle aus:";
+        const moods = [
+          { label: "Einsam", key: "lonely" },
+          { label: "Müde", key: "tired" },
+          { label: "Zärtlich", key: "soft" },
+        ];
+        moods.forEach(m => {
+          const btn = document.createElement("button");
+          btn.textContent = m.label;
+          btn.className = "button";
+          btn.onclick = () => setMood(m.key);
+          optionsEl.appendChild(btn);
+        });
+      }
+    }
+
+    loadMood();
   </script>
 </body>
 </html>
