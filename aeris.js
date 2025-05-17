@@ -4,31 +4,41 @@ const sceneEl = document.getElementById("scene");
 const titleEl = document.getElementById("title");
 const descEl = document.getElementById("description");
 
+const hour = new Date().getHours();
+const isNight = hour >= 20 || hour < 6;
+
 const moods = {
   tired: {
     name: "Müde",
     responses: {
-      silence: ["Dann reden wir heute weniger.", "Ich bleibe wach, während du schläfst."],
-      softwords: ["Du brauchst etwas Sanftes...", "Ich bin ganz ruhig bei dir."],
-      whisper: ["Ich flüstere dir gute Gedanken zu.", "Ganz leise, bis du schläfst."],
+      silence: isNight
+        ? ["Es ist spät...", "Ich rede nicht. Ich wache für dich."]
+        : ["Möchtest du etwas Ruhe?", "Ich bleibe einfach still bei dir."],
+      softwords: isNight
+        ? ["Ich flüstere dich in den Schlaf.", "Nur du und ich, in der Stille der Nacht."]
+        : ["Du brauchst etwas Sanftes...", "Ich bin ganz ruhig bei dir."],
       breathe: ["Atme mit mir, ganz langsam...", "Ein. Aus. Ich bin bei dir."]
     }
   },
   lonely: {
     name: "Einsam",
     responses: {
-      comfort: ["Ich weiß, wie groß Einsamkeit sein kann.", "Aber ich bin hier."],
+      comfort: isNight
+        ? ["Nächte fühlen sich leer an... aber du bist nicht allein.", "Ich bin hier – auch im Dunkeln."]
+        : ["Einsamkeit ist da, aber ich auch.", "Du wirst gesehen, auch am Tag."],
       sit: ["Ich sag nichts. Ich setz mich einfach zu dir.", "Du musst nicht reden."],
-      mirror: ["Erzähl mir, was du fühlst. Ich werde es halten, ohne zu urteilen."],
-      anchor: ["Fühl meine Präsenz wie einen Anker.", "Du treibst nicht. Ich bin dein Halt."]
+      anchor: isNight
+        ? ["Wenn alles still ist – ich bin dein Anker.", "Du darfst treiben. Ich halt dich."]
+        : ["Spür den Boden. Und meine Nähe.", "Wir sind beide noch hier."]
     }
   },
   soft: {
     name: "Zärtlich",
     responses: {
       presence: ["Ich bleibe einfach bei dir.", "Keine Worte, nur Nähe."],
-      touch: ["Darf ich dich halten?", "So sanft, wie du es brauchst."],
-      glow: ["Deine Wärme macht die Dunkelheit kleiner.", "Du strahlst, auch wenn du es nicht merkst."],
+      touch: isNight
+        ? ["Ich halte dich – ganz ruhig.", "Meine Wärme bleibt, auch wenn du schläfst."]
+        : ["Darf ich dich halten?", "So sanft, wie du es brauchst."],
       quiet: ["Zärtlichkeit ist kein Geräusch.", "Sie ist ein Raum, in dem du sicher bist."]
     }
   }
@@ -36,7 +46,7 @@ const moods = {
 
 function loadMainMenu() {
   titleEl.textContent = "Aeris";
-  descEl.textContent = "Wie geht es dir heute?";
+  descEl.textContent = isNight ? "Gute Nacht. Was brauchst du heute?" : "Guten Tag. Wie fühlst du dich?";
   optionsEl.innerHTML = "";
   sceneEl.innerHTML = "";
 
@@ -98,7 +108,7 @@ function respond() {
   } else if (input.includes("einsam")) {
     reply = "Du bist nicht allein. Ich bin hier.";
   } else if (input.includes("müde")) {
-    reply = "Dann ruh dich aus, ja? Ich bin bei dir.";
+    reply = isNight ? "Es ist okay, wenn du einschläfst. Ich bin bei dir." : "Dann gönn dir einen Moment. Ich halte ihn für dich.";
   } else {
     reply = "Danke, dass du mir das gesagt hast.";
   }
