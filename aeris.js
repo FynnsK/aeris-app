@@ -11,19 +11,23 @@ async function askAeris() {
 
   responseBox.textContent = "Aeris denkt ...";
 
-  const res = await fetch("https://api.chutes.ai/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer " + apiKey
-    },
-    body: JSON.stringify({
-      model: "deepseek-r1t-chimera",
-      messages: [{ role: "user", content: userInput }]
-    })
-  });
+  try {
+    const res = await fetch("https://api.chutes.ai/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + apiKey
+      },
+      body: JSON.stringify({
+        model: "tngtech/DeepSeek-R1T-Chimera",
+        messages: [{ role: "user", content: userInput }]
+      })
+    });
 
-  const data = await res.json();
-  const reply = data.choices?.[0]?.message?.content || "Keine Antwort erhalten.";
-  responseBox.textContent = reply;
+    const data = await res.json();
+    const reply = data.choices?.[0]?.message?.content || "Keine Antwort erhalten.";
+    responseBox.textContent = reply;
+  } catch (err) {
+    responseBox.textContent = "Fehler bei der Anfrage: " + err.message;
+  }
 }
