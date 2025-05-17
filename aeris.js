@@ -24,8 +24,20 @@ async function askAeris() {
       })
     });
 
+    const contentType = res.headers.get("content-type");
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error("Fehler " + res.status + ": " + errorText);
+    }
+
+    if (!contentType || !contentType.includes("application/json")) {
+      const text = await res.text();
+      throw new Error("Antwort ist kein JSON: " + text.slice(0, 100));
+    }
+
     const data = await res.json();
-    const reply = data.choices?.[0]?.message?.content || "Keine Antwort erhalten.";
+    const reply = data.choices?.[0]?.message?.content || "Antwort war leer.";
     responseBox.textContent = reply;
   } catch (err) {
     responseBox.textContent = "Fehler bei der Anfrage: " + err.message;
